@@ -79,8 +79,14 @@ app.use(errorHandler);
 // if (require.main === module) startServer();
 
 
+
 async function startServer() {
   try {
+
+    console.log("Node version:", process.version);
+    console.log("Global crypto:", typeof globalThis.crypto);
+    console.log("Crypto module:", typeof require("node:crypto").createHash);
+    console.log("Mongoose version:", require("mongoose/package.json").version);
     await connectToDatabase();
 
     app.listen(PORT, "0.0.0.0", () => {
