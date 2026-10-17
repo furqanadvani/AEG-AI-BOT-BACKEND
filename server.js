@@ -54,28 +54,44 @@ app.use(notFoundHandler);
 
 app.use(errorHandler);
 
-const startServer = async () => {
+// const startServer = async () => {
+//   try {
+//     await connectToDatabase();
+
+//     const server = app.listen(PORT, () => {
+//       console.log(`Server is running on port ${PORT}`);
+//     });
+
+//     const shutdown = (signal) => {
+//       console.log(`${signal} received, shutting down...`);
+//       server.close(() => process.exit(0));
+//       setTimeout(() => process.exit(1), 10000).unref();
+//     };
+//     process.on("SIGTERM", () => shutdown("SIGTERM"));
+//     process.on("SIGINT", () => shutdown("SIGINT"));
+//   } catch (error) {
+//     console.error("Failed to start server:", error);
+//     process.exit(1);
+//   }
+// };
+
+// // Tests app ko import karte hain bina server start kiye
+// if (require.main === module) startServer();
+
+
+async function startServer() {
   try {
     await connectToDatabase();
 
-    const server = app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
     });
-
-    const shutdown = (signal) => {
-      console.log(`${signal} received, shutting down...`);
-      server.close(() => process.exit(0));
-      setTimeout(() => process.exit(1), 10000).unref();
-    };
-    process.on("SIGTERM", () => shutdown("SIGTERM"));
-    process.on("SIGINT", () => shutdown("SIGINT"));
   } catch (error) {
-    console.error("Failed to start server:", error);
+    console.error("Application startup failed:", error);
     process.exit(1);
   }
-};
+}
 
-// Tests app ko import karte hain bina server start kiye
-if (require.main === module) startServer();
+startServer();
 
 module.exports = app;
