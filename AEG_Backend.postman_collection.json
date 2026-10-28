@@ -1,0 +1,3280 @@
+{
+ "info": {
+  "name": "AEG Visa AI Backend v2",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "http://localhost:8080"
+  },
+  {
+   "key": "token",
+   "value": ""
+  },
+  {
+   "key": "apiKey",
+   "value": ""
+  }
+ ],
+ "item": [
+  {
+   "name": "Auth",
+   "item": [
+    {
+     "name": "Login",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/auth/login",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "auth",
+        "login"
+       ]
+      },
+      "auth": {
+       "type": "noauth"
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"admin@travelprot.com\",\n  \"password\": \"ChangeMe@12345\"\n}"
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "exec": [
+         "const j=pm.response.json(); if(j.data&&j.data.token) pm.collectionVariables.set('token', j.data.token);"
+        ],
+        "type": "text/javascript"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Profile",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/auth/profile",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "auth",
+        "profile"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Change password",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/auth/change-password",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "auth",
+        "change-password"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"currentPassword\": \"\",\n  \"newPassword\": \"\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Forgot password",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/auth/forgot-password",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "auth",
+        "forgot-password"
+       ]
+      },
+      "auth": {
+       "type": "noauth"
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"email\": \"admin@travelprot.com\"\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Chat (bot test)",
+   "item": [
+    {
+     "name": "Send message (JWT)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/chat/message?debug=true",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "chat",
+        "message"
+       ],
+       "query": [
+        {
+         "key": "debug",
+         "value": "true"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"sessionId\": \"test-1\",\n  \"text\": \"Assalam o alaikum, mujhe Dubai ka visa chahiye\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Send message (API key)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       },
+       {
+        "key": "x-api-key",
+        "value": "{{apiKey}}"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/chat/message?debug=true",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "chat",
+        "message"
+       ],
+       "query": [
+        {
+         "key": "debug",
+         "value": "true"
+        }
+       ]
+      },
+      "auth": {
+       "type": "noauth"
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"sessionId\": \"test-2\",\n  \"text\": \"hi\",\n  \"channel\": \"web\"\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "AI Control",
+   "item": [
+    {
+     "name": "Status",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/ai/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "ai",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Usage history",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/ai/usage?period=day&limit=30",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "ai",
+        "usage"
+       ],
+       "query": [
+        {
+         "key": "period",
+         "value": "day"
+        },
+        {
+         "key": "limit",
+         "value": "30"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Get AI settings",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/ai/settings",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "ai",
+        "settings"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Set limits",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/ai/settings",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "ai",
+        "settings"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"values\": {\n    \"AiDailyTokenLimit\": \"200000\",\n    \"AiWarnAtPercent\": \"80\",\n    \"AiLimitNotifyEmails\": \"owner@example.com\"\n  }\n}"
+      }
+     }
+    },
+    {
+     "name": "Test AI",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/ai/test",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "ai",
+        "test"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Integrations",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/integrations",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "integrations"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Set AI (Groq)",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/integrations/ai",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "integrations",
+        "ai"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"provider\": \"groq\",\n  \"config\": {\n    \"baseUrl\": \"https://api.groq.com/openai/v1\"\n  },\n  \"secrets\": {\n    \"apiKey\": \"gsk_...\"\n  },\n  \"isEnabled\": true\n}"
+      }
+     }
+    },
+    {
+     "name": "Set Email (SMTP)",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/integrations/email",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "integrations",
+        "email"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"provider\": \"smtp\",\n  \"config\": {\n    \"host\": \"smtp.gmail.com\",\n    \"port\": 587,\n    \"secure\": false,\n    \"user\": \"you@gmail.com\",\n    \"from\": \"AEG <you@gmail.com>\"\n  },\n  \"secrets\": {\n    \"password\": \"app-password\"\n  },\n  \"isEnabled\": true\n}"
+      }
+     }
+    },
+    {
+     "name": "Set CRM (phase 2)",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/integrations/crm",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "integrations",
+        "crm"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"config\": {\n    \"baseUrl\": \"https://crm.example.com/api\",\n    \"endpoints\": {\n      \"createLead\": \"/leads\",\n      \"updateLead\": \"/leads/:crmId\",\n      \"ping\": \"/health\"\n    },\n    \"leadFieldMap\": {}\n  },\n  \"secrets\": {\n    \"apiKey\": \"...\"\n  },\n  \"isEnabled\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Test",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/integrations/ai/test",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "integrations",
+        "ai",
+        "test"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "API Keys",
+   "item": [
+    {
+     "name": "Create (AI agent)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/api-keys",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "api-keys"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"AI agent\",\n  \"permissions\": [\n    {\n      \"key\": \"LEADS\",\n      \"access\": [\n        \"VIEW\",\n        \"CREATE\",\n        \"UPDATE\"\n      ]\n    },\n    {\n      \"key\": \"CUSTOMERS\",\n      \"access\": [\n        \"VIEW\"\n      ]\n    },\n    {\n      \"key\": \"CHAT\",\n      \"access\": [\n        \"CREATE\"\n      ]\n    }\n  ]\n}"
+      }
+     },
+     "event": [
+      {
+       "listen": "test",
+       "script": {
+        "exec": [
+         "const j=pm.response.json(); if(j.data&&j.data.key) pm.collectionVariables.set('apiKey', j.data.key);"
+        ],
+        "type": "text/javascript"
+       }
+      }
+     ]
+    },
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/api-keys",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "api-keys"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Me (with key)",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       },
+       {
+        "key": "x-api-key",
+        "value": "{{apiKey}}"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/api-keys/me",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "api-keys",
+        "me"
+       ]
+      },
+      "auth": {
+       "type": "noauth"
+      }
+     }
+    },
+    {
+     "name": "Regenerate",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/api-keys/:id/regenerate",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "api-keys",
+        ":id",
+        "regenerate"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    },
+    {
+     "name": "Disable",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/api-keys/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "api-keys",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Settings",
+   "item": [
+    {
+     "name": "Map",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/settings/map",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "settings",
+        "map"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/settings?group=ai",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "settings"
+       ],
+       "query": [
+        {
+         "key": "group",
+         "value": "ai"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update values",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/settings",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "settings"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"values\": {\n    \"AssistantName\": \"Ayesha\",\n    \"SupportPhone\": \"0300 0000000\"\n  }\n}"
+      }
+     }
+    },
+    {
+     "name": "Seed defaults",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/settings/seed-defaults",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "settings",
+        "seed-defaults"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Countries",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries?page=1&limit=20",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries"
+       ],
+       "query": [
+        {
+         "key": "page",
+         "value": "1"
+        },
+        {
+         "key": "limit",
+         "value": "20"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"UAE\",\n  \"aliases\": [\n    \"Dubai\",\n    \"Emirates\"\n  ],\n  \"cities\": [\n    \"Dubai\",\n    \"Abu Dhabi\"\n  ],\n  \"notes\": \"\",\n  \"isActive\": true\n}"
+      }
+     }
+    },
+    {
+     "name": "Get",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"UAE\",\n  \"aliases\": [\n    \"Dubai\",\n    \"Emirates\"\n  ],\n  \"cities\": [\n    \"Dubai\",\n    \"Abu Dhabi\"\n  ],\n  \"notes\": \"\",\n  \"isActive\": true\n}"
+      }
+     }
+    },
+    {
+     "name": "Toggle status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Delete",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Bulk upsert",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/countries/bulk",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "countries",
+        "bulk"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"rows\": [\n    {\n      \"name\": \"UAE\",\n      \"aliases\": [\n        \"Dubai\",\n        \"Emirates\"\n      ],\n      \"cities\": [\n        \"Dubai\",\n        \"Abu Dhabi\"\n      ],\n      \"notes\": \"\",\n      \"isActive\": true\n    }\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Visa types",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types?page=1&limit=20",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types"
+       ],
+       "query": [
+        {
+         "key": "page",
+         "value": "1"
+        },
+        {
+         "key": "limit",
+         "value": "20"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"ALL\",\n  \"name\": \"Tourist\",\n  \"aliases\": [\n    \"visit\",\n    \"ghoomna\"\n  ],\n  \"action\": \"Apply\",\n  \"customerMessage\": \"\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Get",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"ALL\",\n  \"name\": \"Tourist\",\n  \"aliases\": [\n    \"visit\",\n    \"ghoomna\"\n  ],\n  \"action\": \"Apply\",\n  \"customerMessage\": \"\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Toggle status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Delete",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Bulk upsert",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/visa-types/bulk",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "visa-types",
+        "bulk"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"rows\": [\n    {\n      \"country\": \"ALL\",\n      \"name\": \"Tourist\",\n      \"aliases\": [\n        \"visit\",\n        \"ghoomna\"\n      ],\n      \"action\": \"Apply\",\n      \"customerMessage\": \"\"\n    }\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Questions",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions?page=1&limit=20",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions"
+       ],
+       "query": [
+        {
+         "key": "page",
+         "value": "1"
+        },
+        {
+         "key": "limit",
+         "value": "20"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"ALL\",\n  \"visaType\": \"ALL\",\n  \"field\": \"travellers\",\n  \"label\": \"Number of travellers\",\n  \"whatToAsk\": \"Kitne log travel karenge?\",\n  \"type\": \"number\",\n  \"options\": \"1-20\",\n  \"required\": true,\n  \"order\": 3\n}"
+      }
+     }
+    },
+    {
+     "name": "Get",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"ALL\",\n  \"visaType\": \"ALL\",\n  \"field\": \"travellers\",\n  \"label\": \"Number of travellers\",\n  \"whatToAsk\": \"Kitne log travel karenge?\",\n  \"type\": \"number\",\n  \"options\": \"1-20\",\n  \"required\": true,\n  \"order\": 3\n}"
+      }
+     }
+    },
+    {
+     "name": "Toggle status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Delete",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Bulk upsert",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/questions/bulk",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "questions",
+        "bulk"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"rows\": [\n    {\n      \"country\": \"ALL\",\n      \"visaType\": \"ALL\",\n      \"field\": \"travellers\",\n      \"label\": \"Number of travellers\",\n      \"whatToAsk\": \"Kitne log travel karenge?\",\n      \"type\": \"number\",\n      \"options\": \"1-20\",\n      \"required\": true,\n      \"order\": 3\n    }\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Knowledge",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge?page=1&limit=20",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge"
+       ],
+       "query": [
+        {
+         "key": "page",
+         "value": "1"
+        },
+        {
+         "key": "limit",
+         "value": "20"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"UAE\",\n  \"visaType\": \"Tourist\",\n  \"topic\": \"Processing time\",\n  \"info\": \"3-5 working days\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Get",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"UAE\",\n  \"visaType\": \"Tourist\",\n  \"topic\": \"Processing time\",\n  \"info\": \"3-5 working days\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Toggle status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Delete",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Bulk upsert",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/knowledge/bulk",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "knowledge",
+        "bulk"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"rows\": [\n    {\n      \"country\": \"UAE\",\n      \"visaType\": \"Tourist\",\n      \"topic\": \"Processing time\",\n      \"info\": \"3-5 working days\"\n    }\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Agents",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents?page=1&limit=20",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents"
+       ],
+       "query": [
+        {
+         "key": "page",
+         "value": "1"
+        },
+        {
+         "key": "limit",
+         "value": "20"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"UAE\",\n  \"name\": \"Ali\",\n  \"email\": \"ali@example.com\",\n  \"priority\": 1\n}"
+      }
+     }
+    },
+    {
+     "name": "Get",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"country\": \"UAE\",\n  \"name\": \"Ali\",\n  \"email\": \"ali@example.com\",\n  \"priority\": 1\n}"
+      }
+     }
+    },
+    {
+     "name": "Toggle status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"isActive\": false\n}"
+      }
+     }
+    },
+    {
+     "name": "Delete",
+     "request": {
+      "method": "DELETE",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Bulk upsert",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/agents/bulk",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "agents",
+        "bulk"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"rows\": [\n    {\n      \"country\": \"UAE\",\n      \"name\": \"Ali\",\n      \"email\": \"ali@example.com\",\n      \"priority\": 1\n    }\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Customers",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/customers?search=0300",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "customers"
+       ],
+       "query": [
+        {
+         "key": "search",
+         "value": "0300"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/customers",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "customers"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"Furqan Ahmed\",\n  \"phone\": \"0300 1234567\",\n  \"email\": \"\",\n  \"source\": \"walk-in\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Profile (leads/queries/sessions)",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/customers/:id/profile",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "customers",
+        ":id",
+        "profile"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "By phone",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/customers/by-phone/03001234567",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "customers",
+        "by-phone",
+        "03001234567"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Update",
+     "request": {
+      "method": "PUT",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/customers/:id",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "customers",
+        ":id"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"city\": \"Karachi\",\n  \"tags\": [\n    \"vip\"\n  ]\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Leads",
+   "item": [
+    {
+     "name": "List",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads?status=New,In review&page=1",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads"
+       ],
+       "query": [
+        {
+         "key": "status",
+         "value": "New,In review"
+        },
+        {
+         "key": "page",
+         "value": "1"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Statuses",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/statuses",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        "statuses"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "By reference",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/ref/AEG-XXXX",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        "ref",
+        "AEG-XXXX"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create (manual)",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"fullName\": \"Furqan Ahmed\",\n  \"whatsapp\": \"03001234567\",\n  \"country\": \"UAE\",\n  \"visaType\": \"Tourist\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Update status",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/:id/status",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        ":id",
+        "status"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"status\": \"In review\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Assign agent",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/:id/assign",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        ":id",
+        "assign"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"agentId\": \"\"\n}"
+      }
+     }
+    },
+    {
+     "name": "Add note",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/:id/notes",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        ":id",
+        "notes"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"text\": \"Customer ko call ki\"\n}"
+      }
+     }
+    },
+    {
+     "name": "CRM resync",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/leads/:id/crm-sync",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "leads",
+        ":id",
+        "crm-sync"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Queries",
+   "item": [
+    {
+     "name": "Open queries",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/queries?status=Open",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "queries"
+       ],
+       "query": [
+        {
+         "key": "status",
+         "value": "Open"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Answer + add to knowledge",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/queries/:id/answer",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "queries",
+        ":id",
+        "answer"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"answer\": \"Jawab yahan\",\n  \"status\": \"Answered\",\n  \"addToKnowledge\": true\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Sessions & Logs",
+   "item": [
+    {
+     "name": "Sessions",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/sessions",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "sessions"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Reset session",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/sessions/:id/reset",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "sessions",
+        ":id",
+        "reset"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    },
+    {
+     "name": "Human takeover",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/sessions/:id/takeover",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "sessions",
+        ":id",
+        "takeover"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"humanTakeover\": true\n}"
+      }
+     }
+    },
+    {
+     "name": "Chat logs",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/chat-logs?sessionId=test-1",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "chat-logs"
+       ],
+       "query": [
+        {
+         "key": "sessionId",
+         "value": "test-1"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Members & Roles",
+   "item": [
+    {
+     "name": "ACL modules",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/roles/modules",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "roles",
+        "modules"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Roles",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/roles",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "roles"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Create role",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/roles",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "roles"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"name\": \"Counter Staff\",\n  \"description\": \"Front desk\",\n  \"permissions\": [\n    {\n      \"key\": \"CUSTOMERS\",\n      \"access\": [\n        \"VIEW\",\n        \"CREATE\"\n      ]\n    },\n    {\n      \"key\": \"LEADS\",\n      \"access\": [\n        \"VIEW\"\n      ]\n    }\n  ]\n}"
+      }
+     }
+    },
+    {
+     "name": "Members",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/members",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "members"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Add member",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/members",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "members"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"firstName\": \"Sara\",\n  \"lastName\": \"Khan\",\n  \"email\": \"sara@example.com\",\n  \"password\": \"Strong@123\",\n  \"role\": \"<roleId>\"\n}"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Dashboard & Notifications",
+   "item": [
+    {
+     "name": "Stats",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/dashboard/stats",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "dashboard",
+        "stats"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Notifications",
+     "request": {
+      "method": "GET",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/notifications?unread=true",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "notifications"
+       ],
+       "query": [
+        {
+         "key": "unread",
+         "value": "true"
+        }
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "name": "Mark all read",
+     "request": {
+      "method": "PATCH",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       }
+      ],
+      "url": {
+       "raw": "{{baseUrl}}/api/notifications/all/read",
+       "host": [
+        "{{baseUrl}}"
+       ],
+       "path": [
+        "api",
+        "notifications",
+        "all",
+        "read"
+       ]
+      },
+      "auth": {
+       "type": "bearer",
+       "bearer": [
+        {
+         "key": "token",
+         "value": "{{token}}",
+         "type": "string"
+        }
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{}"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}
